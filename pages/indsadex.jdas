@@ -1,0 +1,80 @@
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import DiscordIcon from '../components/icons/discord';
+import FAQIcon from '../components/icons/faq';
+import RulesIcon from '../components/icons/rules';
+import ScamsIcon from '../components/icons/scams';
+
+// Reusable Card Component (no changes needed here)
+const Card = ({ title, description, href, icon: Icon }) => (
+  <Link
+    href={href}
+    className="block p-6 bg-primary border border-border-color rounded-lg transition-all duration-200 ease-in-out hover:border-accent hover:scale-[1.02] hover:shadow-lg hover:shadow-accent/10"
+  >
+    <div className="flex items-center mb-2">
+      {Icon && <Icon />}
+      <h3 className="ml-3 text-xl font-bold text-text-main">{title}</h3>
+    </div>
+    <p className="text-text-secondary">{description}</p>
+  </Link>
+);
+
+// The Main Homepage Component
+export default function HomePage() {
+  // --- THE DEFINITIVE FOUC FIX ---
+  // 1. We start with the component not being "mounted"
+  const [isMounted, setIsMounted] = useState(false);
+
+  // 2. After the component renders on the client, this effect runs once
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // 3. We render the content immediately, but make it invisible until mounted.
+  //    This prevents layout shift and content "popping" in.
+  const containerClasses = `
+    flex flex-col items-center justify-center min-h-[80vh] px-4 
+    transition-opacity duration-500 ease-in-out
+    ${isMounted ? 'opacity-100' : 'opacity-0'}
+  `;
+
+  return (
+    <div className={containerClasses}>
+      <div className="text-center mb-12">
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-black dark:text-white mb-4">
+          No Text To Speech
+        </h1>
+        <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto">
+          The official community hub. Find our rules, guides, and important information.
+        </p>
+      </div>
+
+      <div className="grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+        <Card 
+          title="Rules" 
+          description="Read our server and community guidelines." 
+          href="/rules" 
+          icon={RulesIcon} 
+        />
+        <Card 
+          title="Scams" 
+          description="Learn how to identify and avoid common scams." 
+          href="/scams" 
+          icon={ScamsIcon} 
+        />
+        <Card 
+          title="FAQ" 
+          description="Find answers to frequently asked questions." 
+          href="/faq" 
+          icon={FAQIcon} 
+        />
+        <Card 
+          title="Discord" 
+          description="Join our official Discord server to chat." 
+          href="https://discord.gg/ntts" 
+          icon={DiscordIcon} 
+        />
+      </div>
+    </div>
+  );
+}

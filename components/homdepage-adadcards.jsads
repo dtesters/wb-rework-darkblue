@@ -1,0 +1,24 @@
+import Link from 'next/link';
+
+// Our new custom card that we can style freely
+export const HomepageCard = ({ title, description, href, icon: Icon }) => (
+  <Link
+    href={href}
+    className="block p-6 bg-primary border border-border-color rounded-lg transition-all duration-200 ease-in-out hover:border-accent hover:scale-[1.02] hover:shadow-lg hover:shadow-accent/10"
+  >
+    <div className="flex items-center mb-2">
+      {/* The Icon is now passed in and displayed */}
+      {Icon && <Icon />} 
+      <h3 className="ml-3 text-xl font-bold text-text-main">{title}</h3>
+    </div>
+    {/* The description is now part of the card */}
+    {description && <p className="text-text-secondary">{description}</p>}
+  </Link>
+);
+
+// A container for our cards to set up the grid layout
+export const HomepageCards = ({ children }) => (
+  <div className="grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2 mt-12 mb-12">
+    {children}
+  </div>
+);

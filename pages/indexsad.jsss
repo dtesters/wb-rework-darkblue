@@ -1,0 +1,77 @@
+import Link from 'next/link';
+import DiscordIcon from '../components/icons/discord';
+import FAQIcon from '../components/icons/faq';
+import RulesIcon from '../components/icons/rules';
+import ScamsIcon from '../components/icons/scams';
+import { useState, useEffect } from 'react'; // Import hooks from React
+
+// A reusable card component for our links
+const Card = ({ title, description, href, icon: Icon }) => (
+  <Link
+    href={href}
+    className="block p-6 bg-primary border border-border-color rounded-lg transition-all duration-200 ease-in-out hover:border-accent hover:scale-[1.02] hover:shadow-lg hover:shadow-accent/10"
+  >
+    <div className="flex items-center mb-2">
+      <Icon />
+      <h3 className="ml-3 text-xl font-bold text-text-main">{title}</h3>
+    </div>
+    <p className="text-text-secondary">{description}</p>
+  </Link>
+);
+
+export default function HomePage() {
+  // --- THIS IS THE NEW BULLETPROOF FIX ---
+  // We'll use state to wait until the page is mounted on the client
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // This code runs only after the component has mounted in the browser
+    setIsMounted(true);
+  }, []);
+
+  // Until it's mounted, we render nothing. This prevents the flash.
+  if (!isMounted) {
+    return null;
+  }
+  // --- END OF FIX ---
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[80vh] px-4">
+      <div className="text-center mb-12">
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-black dark:text-white mb-4">
+          No Text To Speech
+        </h1>
+        <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto">
+          The official community hub. Find our rules, guides, and important information.
+        </p>
+      </div>
+
+      <div className="grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+        <Card 
+          title="Rules" 
+          description="Read our server and community guidelines." 
+          href="/rules" 
+          icon={RulesIcon} 
+        />
+        <Card 
+          title="Scams" 
+          description="Learn how to identify and avoid common scams." 
+          href="/scams" 
+          icon={ScamsIcon} 
+        />
+        <Card 
+          title="FAQ" 
+          description="Find answers to frequently asked questions." 
+          href="/faq" 
+          icon={FAQIcon} 
+        />
+        <Card 
+          title="Discord" 
+          description="Join our official Discord server to chat." 
+          href="https://discord.gg/ntts" 
+          icon={DiscordIcon} 
+        />
+      </div>
+    </div>
+  );
+}
